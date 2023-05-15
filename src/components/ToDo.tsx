@@ -1,6 +1,6 @@
 import React from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { IToDo, toDoState } from "../atoms";
+import { Categories, IToDo, toDoState } from "../atoms";
 
 export default function ToDo({ text, category, id }: IToDo) {
   const setTodos = useSetRecoilState(toDoState);
@@ -19,24 +19,28 @@ export default function ToDo({ text, category, id }: IToDo) {
       ];
     });
   };
+  const onDeleteBtnClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setTodos((oldTodos) => oldTodos.filter((v) => v.id !== id));
+  };
   return (
     <li>
       <span>{text}</span>
-      {category !== "DOING" && (
-        <button name="DOING" onClick={onClick}>
-          Doing
-        </button>
-      )}
-      {category !== "TO_DO" && (
-        <button name="TO_DO" onClick={onClick}>
+      {category !== Categories.TO_DO && (
+        <button name={Categories.TO_DO} onClick={onClick}>
           To Do
         </button>
       )}
-      {category !== "DONE" && (
-        <button name="DONE" onClick={onClick}>
+      {category !== Categories.DOING && (
+        <button name={Categories.DOING} onClick={onClick}>
+          Doing
+        </button>
+      )}
+      {category !== Categories.DONE && (
+        <button name={Categories.DONE} onClick={onClick}>
           Done
         </button>
       )}
+      <button onClick={onDeleteBtnClick}>❌</button>
     </li>
   );
 }

@@ -1,15 +1,34 @@
 import React from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { Categories, categoryState, toDoSelector, toDoState } from "../atoms";
+import {
+  Categories,
+  categoryState,
+  customCategories,
+  toDoSelector,
+  toDoState,
+} from "../atoms";
 import CreateToDo from "./CreateToDo";
 import ToDo from "./ToDo";
+import { useForm } from "react-hook-form";
+
+interface ICategoryForm {
+  newCategory: string;
+}
 
 export default function ToDoList() {
+  const { register, handleSubmit, setValue } = useForm<ICategoryForm>();
   const toDos = useRecoilValue(toDoSelector);
   const [category, setCategory] = useRecoilState(categoryState);
-  const onInput = (event: React.FocusEvent<HTMLSelectElement>) => {
+  const onInput = (event: React.FormEvent<HTMLSelectElement>) => {
     setCategory(event.currentTarget.value as any);
   };
+  const [newCategories, setNewCategories] = useRecoilState(customCategories);
+  const handleNewCategory = ({ newCategory }: ICategoryForm) => {
+    console.log(newCategory);
+    setNewCategories((old) => [...old, newCategory] as any);
+    setValue("newCategory", "");
+  };
+  console.log(newCategories);
   return (
     <div>
       <h1>To Dos</h1>
@@ -17,8 +36,21 @@ export default function ToDoList() {
         <option value={Categories.TO_DO}>To Do</option>
         <option value={Categories.DOING}>Doing</option>
         <option value={Categories.DONE}>Done</option>
+        //추가된 카테고리
+        <option value={Categories.ADD}>+ Add Category</option>
       </select>
-      <CreateToDo />
+      {category === Categories.ADD && (
+        <div>
+          <form onSubmit={handleSubmit(handleNewCategory)}>
+            <input
+              {...register("newCategory", { required: "Please write a Name" })}
+              placeholder="New Category's Name"
+            ></input>
+            <button>Save</button>
+          </form>
+        </div>
+      )}
+      {category !== Categories.ADD && <CreateToDo />}
       {toDos?.map((aTodo) => (
         <ToDo key={aTodo.id} {...aTodo} />
       ))}

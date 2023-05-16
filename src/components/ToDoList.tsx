@@ -9,57 +9,81 @@ import {
 } from "../atoms";
 import CreateToDo from "./CreateToDo";
 import ToDo from "./ToDo";
-import { useForm } from "react-hook-form";
 import styled from "styled-components";
+import CreateCategory from "./CreateCategory";
 
-interface ICategoryForm {
-  newCategory: string;
-}
+const Wrapper = styled.div`
+  min-width: 350px;
+  max-height: 98vh;
+  padding: 15px;
+  background-color: #ebeae0;
+  margin: 20px 0;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  border: #dd72a0 3px solid;
+`;
 
 const Title = styled.h1`
-  font-size: 20px;
-  font-weight: 400;
+  font-size: 30px;
+  font-weight: 600;
+  color: ${(prop) => prop.theme.textColor};
+`;
+
+const Select = styled.select`
+  height: 30px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: none;
+  padding: 5px;
+  background-color: #dd72a0;
+`;
+
+const Option = styled.option`
+  background-color: #f396be;
+`;
+
+const TodoBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  max-height: 500px;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    background: #ccc;
+  }
 `;
 
 export default function ToDoList() {
-  const { register, handleSubmit, setValue } = useForm<ICategoryForm>();
   const toDos = useRecoilValue(toDoSelector);
   const [category, setCategory] = useRecoilState(categoryState);
   const onInput = (event: React.FormEvent<HTMLSelectElement>) => {
     setCategory(event.currentTarget.value as any);
   };
-  const [newCategories, setNewCategories] = useRecoilState(customCategories);
-  const handleNewCategory = ({ newCategory }: ICategoryForm) => {
-    setNewCategories((old) => [...old, newCategory] as any);
-    setValue("newCategory", "");
-  };
+  const newCategories = useRecoilValue(customCategories);
+
   return (
-    <div>
-      <Title>To Dos</Title>
-      <select value={category} onInput={onInput}>
-        <option value={Categories.TO_DO}>To Do</option>
-        <option value={Categories.DOING}>Doing</option>
-        <option value={Categories.DONE}>Done</option>
+    <Wrapper>
+      <Title>To-Dos</Title>
+      <Select value={category} onInput={onInput}>
+        <Option value={Categories.TO_DO}>To Do</Option>
+        <Option value={Categories.DOING}>Doing</Option>
+        <Option value={Categories.DONE}>Done</Option>
         {newCategories?.map((category) => (
-          <option key={Math.random()}>{category}</option>
+          <Option key={Math.random()}>{category}</Option>
         ))}
-        <option value={Categories.ADD}>+ Add Category</option>
-      </select>
-      {category === Categories.ADD && (
-        <div>
-          <form onSubmit={handleSubmit(handleNewCategory)}>
-            <input
-              {...register("newCategory", { required: "Please write a Name" })}
-              placeholder="New Category's Name"
-            ></input>
-            <button>Save</button>
-          </form>
-        </div>
-      )}
+        <Option value={Categories.ADD}>+ Add Category</Option>
+      </Select>
+      {category === Categories.ADD && <CreateCategory />}
       {category !== Categories.ADD && <CreateToDo />}
-      {toDos?.map((aTodo) => (
-        <ToDo key={aTodo.id} {...aTodo} />
-      ))}
-    </div>
+      <TodoBox>
+        {toDos?.map((aTodo) => (
+          <ToDo key={aTodo.id} {...aTodo} />
+        ))}
+      </TodoBox>
+    </Wrapper>
   );
 }

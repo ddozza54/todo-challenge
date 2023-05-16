@@ -3,15 +3,12 @@ import styled from "styled-components";
 import ToDoList from "./components/ToDoList";
 
 const Wrapper = styled.div`
-  display: flex;
-  height: 100vh;
-  width: 100vw;
-  justify-content: center;
-  align-items: center;
+  padding: 0px 20px;
+  max-width: 480px;
+  margin: 0 auto;
 `;
 
 function App() {
-  const onChange = (event: React.FocusEvent<HTMLElement>) => {};
   return (
     <Wrapper>
       <ToDoList />

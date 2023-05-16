@@ -17,14 +17,20 @@ export interface IToDo {
   customCategory?: string;
 }
 
+export interface ICategory {
+  category: string;
+}
+
 export const categoryState = atom<Categories>({
   key: "category",
   default: Categories.TO_DO,
 });
 
-export const customCategories = atom({
+const local = JSON.parse(localStorage.getItem("newCategories") as any);
+
+export const customCategories = atom<ICategory[]>({
   key: "newCategory",
-  default: [],
+  default: local ? local : [],
 });
 
 export const toDoState = atom<IToDo[]>({

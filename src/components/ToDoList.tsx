@@ -72,7 +72,7 @@ export default function ToDoList() {
         <Option value={Categories.TO_DO}>To Do</Option>
         <Option value={Categories.DOING}>Doing</Option>
         <Option value={Categories.DONE}>Done</Option>
-        {newCategories?.map((category) => (
+        {newCategories?.map((category: any) => (
           <Option key={Math.random()}>{category}</Option>
         ))}
         <Option value={Categories.ADD}>+ Add Category</Option>

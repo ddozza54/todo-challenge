@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { customCategories } from "../atoms";
 import styled from "styled-components";
 
@@ -32,9 +32,13 @@ const Button = styled.button`
 
 export default function CreateCategory() {
   const { register, handleSubmit, setValue } = useForm<ICategoryForm>();
-  const setNewCategories = useSetRecoilState(customCategories);
+  const [newCategories, setNewCategories] = useRecoilState(customCategories);
   const handleNewCategory = ({ newCategory }: ICategoryForm) => {
     setNewCategories((old) => [...old, newCategory] as any);
+    localStorage.setItem(
+      "newCategories",
+      JSON.stringify([...newCategories, newCategory])
+    );
     setValue("newCategory", "");
   };
   return (

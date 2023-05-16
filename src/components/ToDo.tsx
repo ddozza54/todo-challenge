@@ -78,9 +78,9 @@ export default function ToDo({ text, category, id, customCategory }: IToDo) {
           </Btn>
         )}
         {newCategories.map(
-          (cate) =>
-            category !== cate && (
-              <Btn name={cate} onClick={onClick}>
+          (cate: any) =>
+            category != cate && (
+              <Btn key={Math.random()} name={cate} onClick={onClick}>
                 {cate}
               </Btn>
             )

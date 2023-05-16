@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { categoryState, toDoState } from "../atoms";
+import { Categories, categoryState, toDoState } from "../atoms";
 
 interface IForm {
   toDo: string;

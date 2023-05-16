@@ -1,9 +1,10 @@
 import React from "react";
-import { useSetRecoilState } from "recoil";
-import { Categories, IToDo, toDoState } from "../atoms";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { Categories, IToDo, customCategories, toDoState } from "../atoms";
 
-export default function ToDo({ text, category, id }: IToDo) {
+export default function ToDo({ text, category, id, customCategory }: IToDo) {
   const setTodos = useSetRecoilState(toDoState);
+  const newCategories = useRecoilValue(customCategories);
   const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const {
       currentTarget: { name },
@@ -23,7 +24,7 @@ export default function ToDo({ text, category, id }: IToDo) {
     setTodos((oldTodos) => oldTodos.filter((v) => v.id !== id));
   };
   return (
-    <li>
+    <li key={id}>
       <span>{text}</span>
       {category !== Categories.TO_DO && (
         <button name={Categories.TO_DO} onClick={onClick}>
@@ -39,6 +40,14 @@ export default function ToDo({ text, category, id }: IToDo) {
         <button name={Categories.DONE} onClick={onClick}>
           Done
         </button>
+      )}
+      {newCategories.map(
+        (cate) =>
+          category !== cate && (
+            <button name={cate} onClick={onClick}>
+              {cate}
+            </button>
+          )
       )}
       <button onClick={onDeleteBtnClick}>❌</button>
     </li>

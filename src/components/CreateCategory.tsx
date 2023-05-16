@@ -22,7 +22,7 @@ const Input = styled.input`
   margin-right: 8px;
 `;
 const Button = styled.button`
-  background-color: #f19066;
+  background-color: gold;
   height: 50px;
   width: 15%;
   border: none;

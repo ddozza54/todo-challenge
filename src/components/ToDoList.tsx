@@ -36,7 +36,7 @@ export default function ToDoList() {
         <option value={Categories.TO_DO}>To Do</option>
         <option value={Categories.DOING}>Doing</option>
         <option value={Categories.DONE}>Done</option>
-        //추가된 카테고리
+        {newCategories?.map(category=> <option>{category}</option>)}
         <option value={Categories.ADD}>+ Add Category</option>
       </select>
       {category === Categories.ADD && (
